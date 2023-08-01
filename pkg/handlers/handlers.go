@@ -8,10 +8,12 @@ import (
 
 // Home is the home page handler
 func Home(w http.ResponseWriter, r *http.Request) {
-	renderer.RenderTemplate(w, "home.page.tmpl")
+	//renderer.RenderTemplate(w, "home.page.tmpl")
+	renderer.RenderCachedTemplate(w, "home.page.tmpl")
 }
 
 // About is the about page handler
 func About(w http.ResponseWriter, r *http.Request) {
-	renderer.RenderTemplate(w, "about.page.tmpl")
+	//renderer.RenderTemplate(w, "about.page.tmpl")
+	renderer.RenderCachedTemplate(w, "about.page.tmpl")
 }
