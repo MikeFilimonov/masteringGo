@@ -2,9 +2,12 @@ package main
 
 import (
 	"fmt"
+	"log"
 	"net/http"
 
+	"github.com/MikeFilimonov/masteringGo/pkg/config"
 	"github.com/MikeFilimonov/masteringGo/pkg/handlers"
+	"github.com/MikeFilimonov/masteringGo/pkg/renderer"
 )
 
 const portNumber = ":8080"
@@ -12,10 +15,24 @@ const portNumber = ":8080"
 // main is the main entry point of the app
 func main() {
 
-	http.HandleFunc("/", handlers.Home)
-	http.HandleFunc("/about", handlers.About)
+	var app config.AppConfig
 
-	fmt.Printf("Starting the app at port %s", portNumber)
+	templateCache, err := renderer.CreateTemplateCache()
+	if err != nil {
+		log.Fatal("Cannot create template cache")
+	}
+
+	app.TemplateCache = templateCache
+
+	repo := handlers.NewRepo(&app)
+	handlers.NewHandlers(repo)
+
+	renderer.NewTemplates(&app)
+
+	http.HandleFunc("/", handlers.Repo.Home)
+	http.HandleFunc("/about", handlers.Repo.About)
+
+	fmt.Printf("Starting the app on port %s ", portNumber)
 
 	_ = http.ListenAndServe(portNumber, nil)
 

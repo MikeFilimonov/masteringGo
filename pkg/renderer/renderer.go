@@ -2,46 +2,63 @@ package renderer
 
 import (
 	"bytes"
+	"fmt"
 	"html/template"
 	"log"
 	"net/http"
 	"path/filepath"
+
+	"github.com/MikeFilimonov/masteringGo/pkg/config"
 )
+
+var functions = template.FuncMap{}
+
+var app *config.AppConfig
+
+// NewTemplates sets the config for the template package
+func NewTemplates(a *config.AppConfig) {
+	app = a
+}
 
 // RenderTemplate renders a page a templage using html template
 func RenderTemplate(w http.ResponseWriter, tmpl string) {
 
-	// create a template cache
-	templateCache, err := createTemplateCache()
-	if err != nil {
-		log.Fatal(err)
+	var templateCache map[string]*template.Template
+
+	if app.UseCache {
+		// get the template cache from the app config
+		templateCache = app.TemplateCache
+	} else {
+		templateCache, _ = CreateTemplateCache()
 	}
 
 	// get requested template from cache
 
 	templateToRender, ok := templateCache[tmpl]
 	if !ok {
-		log.Fatal(err)
+		log.Fatal("Could not get template from template cache")
 	}
 
 	buffer := new(bytes.Buffer)
 
-	err = templateToRender.Execute(buffer, nil)
+	_ = templateToRender.Execute(buffer, nil)
+
+	_, err := buffer.WriteTo(w)
 
 	if err != nil {
-		log.Println(err)
+		fmt.Println("Error writing template to browser", err)
 	}
 
-	// render the template
-	_, err = buffer.WriteTo(w)
+	// // render the template
+	// _, err = buffer.WriteTo(w)
 
-	if err != nil {
-		log.Println(err)
-	}
+	// if err != nil {
+	// 	log.Println(err)
+	// }
 
 }
 
-func createTemplateCache() (map[string]*template.Template, error) {
+func CreateTemplateCache() (map[string]*template.Template, error) {
 
 	// myCache := make(map[string]*template.Template)
 	myCache := map[string]*template.Template{}
