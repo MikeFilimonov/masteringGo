@@ -9,6 +9,7 @@ import (
 	"path/filepath"
 
 	"github.com/MikeFilimonov/masteringGo/pkg/config"
+	"github.com/MikeFilimonov/masteringGo/pkg/models"
 )
 
 var functions = template.FuncMap{}
@@ -21,7 +22,7 @@ func NewTemplates(a *config.AppConfig) {
 }
 
 // RenderTemplate renders a page a templage using html template
-func RenderTemplate(w http.ResponseWriter, tmpl string) {
+func RenderTemplate(w http.ResponseWriter, tmpl string, templateData *models.TemplateData) {
 
 	var templateCache map[string]*template.Template
 
@@ -41,7 +42,7 @@ func RenderTemplate(w http.ResponseWriter, tmpl string) {
 
 	buffer := new(bytes.Buffer)
 
-	_ = templateToRender.Execute(buffer, nil)
+	_ = templateToRender.Execute(buffer, templateData)
 
 	_, err := buffer.WriteTo(w)
 
