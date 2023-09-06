@@ -12,13 +12,17 @@ import (
 	"github.com/MikeFilimonov/masteringGo/pkg/models"
 )
 
-var functions = template.FuncMap{}
+// var functions = template.FuncMap{}
 
 var app *config.AppConfig
 
 // NewTemplates sets the config for the template package
 func NewTemplates(a *config.AppConfig) {
 	app = a
+}
+
+func AddDefaultData(templateData *models.TemplateData) *models.TemplateData {
+	return templateData
 }
 
 // RenderTemplate renders a page a templage using html template
@@ -42,6 +46,7 @@ func RenderTemplate(w http.ResponseWriter, tmpl string, templateData *models.Tem
 
 	buffer := new(bytes.Buffer)
 
+	templateData = AddDefaultData(templateData)
 	_ = templateToRender.Execute(buffer, templateData)
 
 	_, err := buffer.WriteTo(w)
@@ -49,13 +54,6 @@ func RenderTemplate(w http.ResponseWriter, tmpl string, templateData *models.Tem
 	if err != nil {
 		fmt.Println("Error writing template to browser", err)
 	}
-
-	// // render the template
-	// _, err = buffer.WriteTo(w)
-
-	// if err != nil {
-	// 	log.Println(err)
-	// }
 
 }
 
