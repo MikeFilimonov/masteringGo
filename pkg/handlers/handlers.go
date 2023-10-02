@@ -6,7 +6,6 @@ import (
 	"github.com/MikeFilimonov/masteringGo/pkg/config"
 	"github.com/MikeFilimonov/masteringGo/pkg/models"
 	"github.com/MikeFilimonov/masteringGo/pkg/renderer"
-	// "github.com/MikeFilimonov/masteringGo/pkg/renderer"
 )
 
 // Repo the repository used by the handlers
@@ -32,7 +31,9 @@ func NewHandlers(r *Repository) {
 
 // Home is the home page handler
 func (repo *Repository) Home(w http.ResponseWriter, r *http.Request) {
-	//renderer.RenderTemplate(w, "home.page.tmpl")
+
+	remoteIP := r.RemoteAddr
+	repo.App.Session.Put(r.Context(), "remote_ip", remoteIP)
 	renderer.RenderTemplate(w, "home.page.tmpl", &models.TemplateData{})
 }
 
@@ -43,9 +44,10 @@ func (repo *Repository) About(w http.ResponseWriter, r *http.Request) {
 	stringMap := make(map[string]string)
 	stringMap["test"] = "Hello, world war"
 
-	//send the data to the template
+	remoteIP := repo.App.Session.GetString(r.Context(), "remote_ip")
+	stringMap["remote_ip"] = remoteIP
 
-	//renderer.RenderTemplate(w, "about.page.tmpl")
+	//send the data to the template
 	renderer.RenderTemplate(w, "about.page.tmpl", &models.TemplateData{
 		StringMap: stringMap,
 	})
