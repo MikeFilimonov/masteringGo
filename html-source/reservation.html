@@ -12,8 +12,11 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css"
     integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
     <!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vanillajs-datepicker@1.3.4/dist/css/datepicker.min.css"> -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vanillajs-datepicker@1.3.4/dist/css/datepicker-bs4.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vanillajs-datepicker@1.3.4/dist/css/datepicker-bs4.min.css">
+  <link rel="stylesheet" type="text/css" href="https://unpkg.com/notie/dist/notie.min.css">
+  
   <style>
+   
     .my-footer {
 
       height: 5em;
@@ -34,8 +37,8 @@
       max-width: 50%;
     }
 
-    .redText{
-      color: red;
+    .notie-container {
+      box-shadow: none;
     }
 
   </style>
@@ -117,6 +120,9 @@
 
     <div class="row">
       <div class="col">
+      
+        <button id="test_button">Click me</button>
+
       </div>
     </div>
   </div>
@@ -145,16 +151,13 @@
     <script src="https://cdn.jsdelivr.net/npm/vanillajs-datepicker@1.3.4/dist/js/datepicker-full.min.js"></script>
 
   <script>
-    
-    // let testParagraph = document.getElementById("testParagraph");
-    // testParagraph.textContent = "Hello, world war, Biatch";
-    // testParagraph.classList.add("redText");
 
     (function() {
   'use strict';
   window.addEventListener('load', function() {
     // Fetch all the forms we want to apply custom Bootstrap validation styles to
     let forms = document.getElementsByClassName('needs-validation');
+  
     // Loop over them and prevent submission
     Array.prototype.filter.call(forms, function(form) {
       form.addEventListener('submit', function(event) {
@@ -173,8 +176,25 @@
       format: "yyyy-mm-dd",
     });     
 
+    function notify(msg, msgType){
+
+      notie.alert({
+        type: msgType,
+        text: msg,
+        position: 'top'
+      })
+
+    }
+
+    // test code
+    document.getElementById("test_button").addEventListener("click", function(){
+        notify("Much success, so wow", "warning")
+    })
+
   </script>
 <script src="https://cdn.jsdelivr.net/npm/vanillajs-datepicker@1.3.4/dist/js/datepicker-full.min.js"></script>
+<script src="https://unpkg.com/notie"></script>
+
 </body>
 
 </html>
