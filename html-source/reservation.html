@@ -149,8 +149,11 @@
     crossorigin="anonymous"></script>
     
     <script src="https://cdn.jsdelivr.net/npm/vanillajs-datepicker@1.3.4/dist/js/datepicker-full.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
   <script>
+
+    let notifier = Prompt();
 
     (function() {
   'use strict';
@@ -186,10 +189,41 @@
 
     }
 
+    function notifyModal(title, text, icon, confirmationButton){
+       Swal.fire({
+          title: title,
+          html: text,
+          icon: icon,
+          confirmationButtonText: confirmationButton
+       })
+    }
+
     // test code
     document.getElementById("test_button").addEventListener("click", function(){
-        notify("Much success, so wow", "warning")
+        // notify("Much success, so wow", "warning")
+        // notifyModal("Attention", "<em> Study bootstrap, not go</em>", "success", "Okay")
+        notifier.success();
+        notifier.toast();
+
     })
+
+    function Prompt(){
+      let toast = function(){
+        console.log("clicked button and got toast");
+
+
+      }
+
+      let success = function(){
+        console.log("Success +100")
+      }
+
+      return {
+        toast: toast,
+        success: success,
+      }
+
+    }
 
   </script>
 <script src="https://cdn.jsdelivr.net/npm/vanillajs-datepicker@1.3.4/dist/js/datepicker-full.min.js"></script>
